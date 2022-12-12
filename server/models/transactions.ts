@@ -11,5 +11,8 @@ export class Transactions extends BaseEntity {
   title: string;
 
   @Column()
+  userId: number;
+
+  @Column()
   cost: number;
 }

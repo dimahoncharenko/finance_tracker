@@ -1,21 +1,39 @@
 // Imports main functionality
-import { useReducer, createContext, ReactNode, Dispatch } from "react";
+import {
+  useReducer,
+  createContext,
+  ReactNode,
+  Dispatch,
+  useEffect,
+} from "react";
+import axios, { AxiosError } from "axios";
 
 // Imports additional functionality
 import { GlobalReducer, State, Action } from "./reducer";
 
-const initialState: State = {
-  transactions: [
-    { id: 1, title: "Зарплатня", cost: 15000 },
-    { id: 2, title: "Підручник", cost: -600 },
-    { id: 3, title: "Смартфон", cost: -8000 },
-  ],
+// Imports hooks
+import { useError, State as ErrorState } from "../hooks/useError";
+
+export const initialState: State = {
+  transactions: [],
+  user: {
+    username: "Гість",
+    avatar: "/avatars/guest_logo.png",
+  },
 };
 
-type Context = State & { dispatch: Dispatch<Action> };
+type Context = State & {
+  dispatch: Dispatch<Action>;
+  setError: (error: Error) => void;
+  clearError: () => void;
+  error: ErrorState | null;
+};
 export const GlobalContext = createContext<Context>({
   ...initialState,
   dispatch: () => {},
+  setError: (err: Error) => {},
+  clearError: () => {},
+  error: null,
 });
 
 type Props = {
@@ -23,10 +41,52 @@ type Props = {
 };
 export const GlobalProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(GlobalReducer, initialState);
+  const { error, clearError, setError } = useError();
+
+  useEffect(() => {
+    const refresh = async () => {
+      try {
+        const token = localStorage.getItem("token")!;
+
+        const restore = await axios("http://localhost:4000/api/auth/restore", {
+          headers: {
+            token: token,
+          },
+        });
+
+        const restoredUser = restore.data;
+
+        dispatch({ type: "LOGIN_USER", payload: restoredUser });
+
+        const response = await axios("http://localhost:4000/api/transaction", {
+          headers: {
+            token: token,
+          },
+        });
+        const transactions: State["transactions"] = response.data;
+
+        dispatch({ type: "INIT_TRANSACTIONS", payload: transactions });
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          setError(err.response?.data);
+        }
+        console.log(err);
+      }
+    };
+
+    localStorage.getItem("token") && refresh();
+  }, [state.user.username]);
 
   return (
     <GlobalContext.Provider
-      value={{ transactions: state.transactions, dispatch }}
+      value={{
+        user: state.user,
+        transactions: state.transactions,
+        dispatch,
+        error,
+        setError,
+        clearError,
+      }}
     >
       {children}
     </GlobalContext.Provider>

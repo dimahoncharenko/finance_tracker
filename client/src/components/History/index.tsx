@@ -1,8 +1,9 @@
 // Imports main functionality
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
-// Imports components
+// Imports custom components
 import { Item } from "./Item";
+import { ErrorBox } from "../ErrorBox";
 
 // Imports additional functionality
 import { GlobalContext } from "../../context";
@@ -12,7 +13,8 @@ export const History = () => {
 
   return (
     <div className="mt-12 w-full sm:max-w-[400px]">
-      <h2 className="py-1 mb-2 font-bold border-b-[.1em]">
+      <ErrorBox />
+      <h2 className="py-1 mb-2 mt-4 font-bold border-b-[.1em]">
         Історія транзакцій
       </h2>
       <ul className="flex flex-col gap-1">

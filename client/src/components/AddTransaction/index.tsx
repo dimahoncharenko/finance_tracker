@@ -13,14 +13,40 @@ export const AddTransaction = () => {
     sum: 0,
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.sum || form.sum.toString().startsWith("0") || !form.title.trim())
       return;
 
+    let newTransaction;
+
+    if (localStorage.getItem("token")) {
+      const request = await fetch(
+        "http://localhost:4000/api/transaction/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")!,
+          },
+          body: JSON.stringify({
+            title: form.title,
+            cost: form.sum,
+          }),
+        }
+      );
+
+      newTransaction = await request.json();
+    }
+
     dispatch({
       type: "ADD_TRANSACTION",
-      payload: { id: v4(), title: form.title, cost: form.sum },
+      payload: newTransaction || {
+        title: form.title,
+        cost: Number(form.sum),
+        id: v4(),
+      },
     });
+
     setForm({
       title: "",
       sum: 0,

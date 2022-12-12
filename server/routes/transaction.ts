@@ -1,11 +1,18 @@
 import { Router } from "express";
 
 import { Transactions } from "../models/transactions";
+import { isThereTokenAvailable, areCredentialsProvided } from "../utils";
 
 const app = Router();
 
-app.get("/", async (req, res) => {
-  const response = await Transactions.find({});
+app.get("/", isThereTokenAvailable, async (req, res) => {
+  const { user } = res.locals;
+
+  console.log(user);
+
+  const response = await Transactions.findBy({
+    userId: user.id,
+  });
 
   res.json(response);
 });
@@ -15,7 +22,7 @@ app.get("/:id", async (req, res) => {
   const result = await Transactions.findOneBy({ id: +id });
 
   if (!result) {
-    return res.status(404).json(`There is no transaction with id: ${id}!`);
+    return res.status(404).json(`Немає транзакції з таким id: ${id}!`);
   }
 
   res.json(result);
@@ -27,24 +34,31 @@ app.delete("/:id", async (req, res) => {
 
   if (candidate) {
     await candidate.remove();
-    return res.json(`The transaction with id: ${id} is removed!`);
+    return res.json(`Транзакцію з id: ${id} видалено!`);
   }
 
-  res.json(`There's no transaction with id: ${id}!`);
+  res.json(`Немає транзакції з таким id: ${id}!`);
 });
 
-app.post("/create", async (req, res) => {
-  const { title, cost } = req.body;
+app.post(
+  "/create",
+  isThereTokenAvailable,
+  areCredentialsProvided(["title", "cost"]),
+  async (req, res) => {
+    const { user } = res.locals;
+    const { title, cost } = req.body;
 
-  const newTransaction = Transactions.create({
-    title,
-    cost: Number(cost),
-  });
+    const newTransaction = Transactions.create({
+      title,
+      userId: user.id,
+      cost: Number(cost),
+    });
 
-  const result = await newTransaction.save();
+    const result = await newTransaction.save();
 
-  res.json(result);
-});
+    res.json(result);
+  }
+);
 
 app.patch("/update/:id", async (req, res) => {
   const { id } = req.params;
@@ -59,7 +73,7 @@ app.patch("/update/:id", async (req, res) => {
     return res.json(updated);
   }
 
-  res.json(`There's no transaction with id: ${id}!`);
+  res.json(`Немає транзакції з таким id: ${id}!`);
 });
 
 export default app;

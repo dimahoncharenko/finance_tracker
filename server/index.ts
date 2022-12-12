@@ -1,10 +1,14 @@
 import "reflect-metadata";
 import express from "express";
+import fileUpload from "express-fileupload";
 import { config } from "dotenv";
 import cors from "cors";
 import { DataSource } from "typeorm";
 
 import transactionAPI from "./routes/transaction";
+import authAPI from "./routes/auth";
+import userAPI from "./routes/users";
+
 import { Transactions } from "./models/transactions";
 import { Users } from "./models/users";
 
@@ -18,10 +22,11 @@ const app = express();
   try {
     const db = new DataSource({
       type: "postgres",
-      port: Number(process.env.PG_PORT),
-      database: process.env.PG_DB,
-      password: process.env.PG_PASS,
-      username: process.env.PG_USER,
+      host: process.env.AMAZON_DB_HOST,
+      port: Number(process.env.AMAZON_DB_PORT),
+      database: process.env.AMAZON_DB_NAME,
+      password: process.env.AMAZON_DB_PASS,
+      username: process.env.AMAZON_DB_USERNAME,
       entities: [Transactions, Users],
       logging: false,
       synchronize: true,
@@ -30,13 +35,14 @@ const app = express();
     await db.initialize();
     console.log("Connected to DB!");
 
+    app.use(fileUpload());
+    app.use(express.urlencoded({ extended: false }));
     app.use(cors());
     app.use(express.json());
+    app.use(express.static("public"));
     app.use("/api/transaction", transactionAPI);
-
-    app.get("/connect", (req, res) => {
-      res.json("Everything is fine!");
-    });
+    app.use("/api/auth", authAPI);
+    app.use("/api/user", userAPI);
 
     app.listen(PORT, () => console.log(`Server has rushed on port: ${PORT}.`));
   } catch (err) {

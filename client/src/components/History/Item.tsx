@@ -19,10 +19,21 @@ type Props = {
 
 export const Item = ({ id, title, cost }: Props) => {
   const { isTurnedOn, switchOn, switchOff } = useSwitch();
-  const { transactions, dispatch } = useContext(GlobalContext);
+  const { dispatch } = useContext(GlobalContext);
 
-  const handleDelete = (id: number) => {
-    dispatch({ type: "DELETE_TRANSACTION", payload: id });
+  const handleDelete = async (id: number) => {
+    try {
+      localStorage.getItem("token") &&
+        (await fetch(`http://localhost:4000/api/transaction/${id}`, {
+          method: "DELETE",
+        }));
+
+      dispatch({ type: "DELETE_TRANSACTION", payload: id });
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log(err);
+      }
+    }
   };
 
   return (

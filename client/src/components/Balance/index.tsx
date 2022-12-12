@@ -12,7 +12,7 @@ export const Balance = () => {
       <div className="py-2 mt-6 text-center">
         <p className="text-2xl font-light m-0 balance">Ваш баланс</p>
         <span className="text-3xl font-bold">
-          {transactions.reduce((acc, curr) => acc + curr.cost, 0)} UAH
+          {transactions.reduce((acc, curr) => curr.cost + acc, 0)} UAH
         </span>
       </div>
       <div className="flex shadow-md">
@@ -21,7 +21,7 @@ export const Balance = () => {
           <span className="text-green-300">
             {transactions
               .filter((tr) => tr.cost > 0)
-              .reduce((acc, curr) => acc + curr.cost, 0)}{" "}
+              .reduce((acc, curr) => curr.cost + acc, 0)}{" "}
             UAH
           </span>
         </div>
@@ -30,7 +30,7 @@ export const Balance = () => {
           <span className="text-red-300">
             {transactions
               .filter((tr) => tr.cost < 0)
-              .reduce((acc, curr) => acc + curr.cost, 0)}{" "}
+              .reduce((acc, curr) => curr.cost + acc, 0)}{" "}
             UAH
           </span>
         </div>
