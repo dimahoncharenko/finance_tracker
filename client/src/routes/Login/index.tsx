@@ -5,6 +5,7 @@ import axios, { AxiosError } from "axios";
 
 // Imports additional functionality
 import { GlobalContext } from "../../context";
+import { public_address } from "../../utils";
 
 // Imports custom components
 import { ErrorBox } from "../../components/ErrorBox";
@@ -34,7 +35,7 @@ export const Login = () => {
       if (!form.password.trim() || !form.username.trim()) return;
 
       const request = await axios.post(
-        "http://localhost:4000/api/auth/login",
+        public_address + "/api/auth/login",
         form,
         {
           headers: {
@@ -47,7 +48,7 @@ export const Login = () => {
 
       localStorage.setItem("token", `Bearer ${token}`);
 
-      const restore = await axios("http://localhost:4000/api/auth/restore", {
+      const restore = await axios(public_address + "/api/auth/restore", {
         headers: {
           token: `Bearer ${token}`,
         },

@@ -4,6 +4,7 @@ import { useContext } from "react";
 // Imports additional functionality
 import { useSwitch } from "../../hooks/useSwitch";
 import { GlobalContext } from "../../context";
+import { public_address } from "../../utils";
 
 // Imports styling utils
 import { BsTrash } from "react-icons/bs";
@@ -24,7 +25,7 @@ export const Item = ({ id, title, cost }: Props) => {
   const handleDelete = async (id: number) => {
     try {
       localStorage.getItem("token") &&
-        (await fetch(`http://localhost:4000/api/transaction/${id}`, {
+        (await fetch(`${public_address}/api/transaction/${id}`, {
           method: "DELETE",
         }));
 

@@ -4,6 +4,7 @@ import axios, { AxiosError } from "axios";
 
 // Imports adiitional functionality
 import { GlobalContext } from "../../context";
+import { public_address } from "../../utils";
 
 // Imports custom components
 import { ErrorBox } from "../../components/ErrorBox";
@@ -17,7 +18,7 @@ export const User = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const request = await axios.get("http://localhost:4000/api/user", {
+        const request = await axios.get(public_address + "/api/user", {
           headers: {
             token: localStorage.getItem("token")!,
           },
@@ -53,16 +54,12 @@ export const User = () => {
       file && form.append("file", file);
       form.append("username", username || user.username);
 
-      const request = await axios.patch(
-        "http://localhost:4000/api/user/",
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            token: localStorage.getItem("token")!,
-          },
-        }
-      );
+      const request = await axios.patch(public_address + "/api/user/", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          token: localStorage.getItem("token")!,
+        },
+      });
 
       const result = await request.data;
 

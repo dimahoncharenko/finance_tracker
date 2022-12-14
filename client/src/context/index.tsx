@@ -10,6 +10,7 @@ import axios, { AxiosError } from "axios";
 
 // Imports additional functionality
 import { GlobalReducer, State, Action } from "./reducer";
+import { public_address } from "../utils";
 
 // Imports hooks
 import { useError, State as ErrorState } from "../hooks/useError";
@@ -48,7 +49,7 @@ export const GlobalProvider = ({ children }: Props) => {
       try {
         const token = localStorage.getItem("token")!;
 
-        const restore = await axios("http://localhost:4000/api/auth/restore", {
+        const restore = await axios(public_address + "/api/auth/restore", {
           headers: {
             token: token,
           },
@@ -58,7 +59,7 @@ export const GlobalProvider = ({ children }: Props) => {
 
         dispatch({ type: "LOGIN_USER", payload: restoredUser });
 
-        const response = await axios("http://localhost:4000/api/transaction", {
+        const response = await axios(public_address + "/api/transaction", {
           headers: {
             token: token,
           },

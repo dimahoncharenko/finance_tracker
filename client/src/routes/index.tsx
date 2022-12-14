@@ -1,5 +1,4 @@
 // Imports components
-import { Navbar } from "../components/Navbar";
 import { Balance } from "../components/Balance";
 import { History } from "../components/History";
 import { AddTransaction } from "../components/AddTransaction";

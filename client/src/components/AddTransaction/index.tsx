@@ -4,6 +4,7 @@ import { v4 } from "uuid";
 
 // Imports additional functionality
 import { GlobalContext } from "../../context";
+import { public_address } from "../../utils";
 
 export const AddTransaction = () => {
   const { dispatch } = useContext(GlobalContext);
@@ -20,20 +21,17 @@ export const AddTransaction = () => {
     let newTransaction;
 
     if (localStorage.getItem("token")) {
-      const request = await fetch(
-        "http://localhost:4000/api/transaction/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("token")!,
-          },
-          body: JSON.stringify({
-            title: form.title,
-            cost: form.sum,
-          }),
-        }
-      );
+      const request = await fetch(public_address + "/api/transaction/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token")!,
+        },
+        body: JSON.stringify({
+          title: form.title,
+          cost: form.sum,
+        }),
+      });
 
       newTransaction = await request.json();
     }

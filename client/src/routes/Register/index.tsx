@@ -1,10 +1,11 @@
 // Imports main functionality
 import { useState, ChangeEvent, FormEvent, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 
 // Imports additional functionality
 import { GlobalContext } from "../../context";
+import { public_address } from "../../utils";
 
 // Imports custom components
 import { ErrorBox } from "../../components/ErrorBox";
@@ -47,7 +48,7 @@ export const Register = () => {
           config: {},
         });
 
-      await axios.post("http://localhost:4000/api/auth/register", {
+      await axios.post(public_address + "/api/auth/register", {
         username: form.username,
         password: form.password,
       });
