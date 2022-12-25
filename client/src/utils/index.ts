@@ -1,1 +1,1 @@
-export const public_address = "http://18.224.24.210:4000";
+export const public_address = "https://dev1498.d3lumj0xksklcm.amplifyapp.com";

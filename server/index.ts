@@ -33,11 +33,12 @@ const app = express();
     });
 
     await db.initialize();
-    console.log("Connected to DB!");
 
+    console.log(`Connected to DB! (${db})`);
+
+    app.use(cors());
     app.use(fileUpload());
     app.use(express.urlencoded({ extended: false }));
-    app.use(cors());
     app.use(express.json());
     app.use(express.static("public"));
     app.use("/api/transaction", transactionAPI);
