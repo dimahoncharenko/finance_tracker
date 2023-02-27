@@ -1,1 +1,13 @@
-export const public_address = "https://dev1498.d3lumj0xksklcm.amplifyapp.com";
+import { app, firestore, storage, auth } from "./firebase";
+import { Context, AuthProvider, WithAccount, NoAccount } from "./globalContext";
+
+export {
+  Context,
+  AuthProvider,
+  app,
+  firestore,
+  storage,
+  auth,
+  WithAccount,
+  NoAccount,
+};

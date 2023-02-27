@@ -1,30 +1,20 @@
 // Imports main functionality
-import { useContext, useEffect, MouseEvent } from "react";
+import { useContext } from "react";
 
 // Imports additional functionality
-import { GlobalContext } from "../../context";
+import { Context } from "../../utils";
 
 export const ErrorBox = () => {
-  const { error, clearError } = useContext(GlobalContext);
+  const { error, clearError } = useContext(Context);
 
-  useEffect(() => {
-    clearError();
-  }, []);
-
-  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
-    clearError();
-  };
+  if (error.kind === "no_error") return null;
 
   return (
-    <>
-      {error?.message && (
-        <div
-          onClick={handleClick}
-          className="bg-red-300 border-[#c93535] hover:bg-[#c93535] cursor-pointer text-white rounded-lg border-[1.5px] px-6 py-4 text-center"
-        >
-          {error.message?.message}
-        </div>
-      )}
-    </>
+    <div
+      className="bg-red-300 text-white p-2 rounded-sm cursor-pointer hover:bg-red-400 hover:scale-[0.99] transition"
+      onClick={clearError.bind(null)}
+    >
+      {error.message}
+    </div>
   );
 };

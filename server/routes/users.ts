@@ -30,7 +30,7 @@ app.get("/", isThereTokenAvailable, async (req, res) => {
 
     return res.json({ ...rest });
   } catch (err) {
-    sendError(err, res);
+    return sendError(err, res);
   }
 });
 

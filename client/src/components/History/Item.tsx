@@ -3,8 +3,7 @@ import { useContext } from "react";
 
 // Imports additional functionality
 import { useSwitch } from "../../hooks/useSwitch";
-import { GlobalContext } from "../../context";
-import { public_address } from "../../utils";
+import { Context } from "../../utils";
 
 // Imports styling utils
 import { BsTrash } from "react-icons/bs";
@@ -13,29 +12,14 @@ import { BsTrash } from "react-icons/bs";
 import { HopWindow } from "../HopWindow";
 
 type Props = {
-  id: number;
+  id: string;
   title: string;
   cost: number;
 };
 
 export const Item = ({ id, title, cost }: Props) => {
+  const { deleteTransaction } = useContext(Context);
   const { isTurnedOn, switchOn, switchOff } = useSwitch();
-  const { dispatch } = useContext(GlobalContext);
-
-  const handleDelete = async (id: number) => {
-    try {
-      localStorage.getItem("token") &&
-        (await fetch(`${public_address}/api/transaction/${id}`, {
-          method: "DELETE",
-        }));
-
-      dispatch({ type: "DELETE_TRANSACTION", payload: id });
-    } catch (err) {
-      if (err instanceof Error) {
-        console.log(err);
-      }
-    }
-  };
 
   return (
     <li
@@ -57,7 +41,7 @@ export const Item = ({ id, title, cost }: Props) => {
         embeddedStyles="justify-self-center col-span-1"
       >
         <div>
-          <button onClick={() => handleDelete(id)}>
+          <button onClick={() => deleteTransaction(id)}>
             <BsTrash className="text-xl hover:text-red-300 -mb-[.1em]" />
           </button>
         </div>

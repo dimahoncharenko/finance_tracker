@@ -11,9 +11,12 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
     "axios": "^1.2.1",
+    "bcrypt": "^5.1.0",
+    "firebase": "^9.17.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.3",
@@ -45,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.19",

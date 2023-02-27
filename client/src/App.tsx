@@ -1,9 +1,6 @@
 // Imports main functionality
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Imports additional functionality
-import { GlobalProvider } from "./context";
-
 // Imports components
 import { Navbar } from "./components/Navbar";
 
@@ -13,10 +10,13 @@ import { User } from "./routes/User";
 import { Login } from "./routes/Login";
 import { Register } from "./routes/Register";
 
+// Imports additional functionality
+import { AuthProvider } from "./utils";
+
 function App() {
   return (
-    <GlobalProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Navbar />
         <Routes>
           <Route path="/register" element={<Register />} />
@@ -24,8 +24,8 @@ function App() {
           <Route path="/user" element={<User />} />
           <Route path="/" element={<Index />} />
         </Routes>
-      </Router>
-    </GlobalProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

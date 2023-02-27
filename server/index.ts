@@ -20,13 +20,10 @@ const app = express();
 
 (async () => {
   try {
+    console.log("Connecting...");
     const db = new DataSource({
       type: "postgres",
-      host: process.env.AMAZON_DB_HOST,
-      port: Number(process.env.AMAZON_DB_PORT),
-      database: process.env.AMAZON_DB_NAME,
-      password: process.env.AMAZON_DB_PASS,
-      username: process.env.AMAZON_DB_USERNAME,
+      url: process.env.DB_CONNECTION_URL,
       entities: [Transactions, Users],
       logging: false,
       synchronize: true,
@@ -34,7 +31,7 @@ const app = express();
 
     await db.initialize();
 
-    console.log(`Connected to DB! (${db})`);
+    console.log(`Connected to DB!`);
 
     app.use(cors());
     app.use(fileUpload());
@@ -45,7 +42,7 @@ const app = express();
     app.use("/api/auth", authAPI);
     app.use("/api/user", userAPI);
 
-    app.listen(PORT, () => console.log(`Server has rushed on port: ${PORT}.`));
+    app.listen(PORT, () => console.log(`Server has rushed on port: ${PORT}`));
   } catch (err) {
     if (err instanceof Error) {
       console.error(err.message);

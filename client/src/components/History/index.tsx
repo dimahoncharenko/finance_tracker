@@ -1,19 +1,13 @@
-// Imports main functionality
-import { useContext, useEffect } from "react";
-
 // Imports custom components
 import { Item } from "./Item";
-import { ErrorBox } from "../ErrorBox";
 
-// Imports additional functionality
-import { GlobalContext } from "../../context";
+type Props = {
+  transactions: Transaction[];
+};
 
-export const History = () => {
-  const { transactions } = useContext(GlobalContext);
-
+export const History = ({ transactions }: Props) => {
   return (
     <div className="mt-12 w-full sm:max-w-[400px]">
-      <ErrorBox />
       <h2 className="py-1 mb-2 mt-4 font-bold border-b-[.1em]">
         Історія транзакцій
       </h2>

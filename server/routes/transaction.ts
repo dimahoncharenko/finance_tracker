@@ -25,7 +25,7 @@ app.get("/:id", async (req, res) => {
     return res.status(404).json(`Немає транзакції з таким id: ${id}!`);
   }
 
-  res.json(result);
+  return res.json(result);
 });
 
 app.delete("/:id", async (req, res) => {
@@ -37,7 +37,7 @@ app.delete("/:id", async (req, res) => {
     return res.json(`Транзакцію з id: ${id} видалено!`);
   }
 
-  res.json(`Немає транзакції з таким id: ${id}!`);
+  return res.json(`Немає транзакції з таким id: ${id}!`);
 });
 
 app.post(
@@ -73,7 +73,7 @@ app.patch("/update/:id", async (req, res) => {
     return res.json(updated);
   }
 
-  res.json(`Немає транзакції з таким id: ${id}!`);
+  return res.json(`Немає транзакції з таким id: ${id}!`);
 });
 
 export default app;
